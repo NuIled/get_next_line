@@ -1,80 +1,69 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.line                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aoutifra <aoutifra@strtudent.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/29 15:04:49 by aoutifra          #+#    #+#             */
+/*   Updated: 2022/11/29 15:26:20 by aoutifra         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
-
-char *readline(int fd , char *s)
+char	*readline(int fd,char *str)
 {
-	char *d;
-	if (s == NULL)
-		s = ft_strdup("");
-	int reads;
-	reads = 1;
-	d = ft_calloc(BUFFER_SIZE + 1, 1);
-	
-	while(ft_strchr(d,'\n') == 0 && reads > 0)
+	char	*dst;
+	int		readed;
+	readed = 1;
+	dst = malloc(BUFFER_SIZE + 1);
+	if (!dst || !str)
+		return (NULL);
+	while (ft_strchr(dst, '\n') == 0 && readed > 0)
 	{
-		reads = read(fd,d,BUFFER_SIZE);
-		if(reads < 0)
+		readed = read(fd, dst, BUFFER_SIZE);
+		if (readed < 0)
 			break ;
-		s = ft_strjoin(s,d);
+		str = ft_strjoin(str, dst);
 	}
-	free(d);
-	return(s);
+	free(dst);
+	return (str);
 }
 
-
-char *get_next_line(int fd)
+char	*get_next_line(int fd)
 {
-	static char *s;
-	char *d;
-	char *c;
-	int i;
- 
+	static char	*stat;
+	char		*line;
+	int			i;
+
 	i = 0;
 	if (fd < 0 || BUFFER_SIZE == 0)
 		return (NULL);
-	d = readline(fd,s);
-	if (!s)
-		ft_strdup("");
-	while (d[i] != '\0' && d[i] != '\n')
+	stat = readline(fd, stat);
+	if (!stat)
+	{
+		free (stat);
+		return(NULL);
+		}
+	while (stat[i] != '\0' && stat[i] != '\n')
 		i++;
-	c = ft_substr(d, 0, i);
-	if (d[i] == '\n')
+	line = ft_substr(stat, 0, i + 1);
+	if (stat[i] == '\n')
 		i++;
-	s = ft_substr (d,i, strlen(d) - i);
-	if (d[0] == 0)
-		return (NULL);
-	 if (s)
-	 	free (s);
-
-	return c;
+	stat = ft_strtrim (stat, i);
+	if (!stat)
+		free (stat);
+	return (line);
 }
-// int main ()
-// {
-// 	int fd;
+int main ()
+{
+	int fd;
 	
-// 	fd = open("42",O_RDONLY);
-// 	printf("--->%s\n",get_next_line(fd));
-// 	printf("--->%s\n",get_next_line(fd));
-// 	printf("--->%s\n",get_next_line(fd));
-// 	printf("--->%s\n",get_next_line(fd));
-// 	printf("--->%s\n",get_next_line(fd));
-// 	printf("--->%s\n",get_next_line(fd));
-// 	printf("--->%s\n",get_next_line(fd));
-// 	printf("--->%s\n",get_next_line(fd));
-// 	printf("--->%s\n",get_next_line(fd));
-// 	printf("--->%s\n",get_next_line(fd));
-// 	printf("--->%s\n",get_next_line(fd));
-// 	printf("--->%s\n",get_next_line(fd));
-// 	printf("--->%s\n",get_next_line(fd));
-// 	printf("--->%s\n",get_next_line(fd));
-// 	printf("--->%s\n",get_next_line(fd));
-// 	printf("--->%s\n",get_next_line(fd));
-// 	printf("--->%s\n",get_next_line(fd));
-// 	printf("--->%s\n",get_next_line(fd));
-// 	printf("--->%s\n",get_next_line(fd));
-// 	// printf("%s",get_next_line(fd));
-// 	// printf("%s\n",get_next_line(fd));
-// 	// printf("%s\n",get_next_line(fd));
+	fd = open("file.txt",O_RDONLY);
+	printf("%s",get_next_line(fd));
+	printf("%s",get_next_line(fd));
+
 	
-// 	return 0;
-// }
+	return 0;
+}

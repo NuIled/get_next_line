@@ -41,29 +41,19 @@ int ft_strchr(char *s, char c)
     }
     return 0;
 }
-char	*ft_calloc(size_t count, size_t n)
-{
-	char 	*s;
-	size_t	 i;
-	i = 0;
 
-	s = malloc(count * n);
-	if (s == 0)
-		return (NULL);
-	while (s[i] && i < (n * count))
-		s[i++] = 0;
-	return (s);
-}
-char	*ft_strdup(const char *s1 )
+char	*ft_strtrim(char *s, int start)
 {
-	char	*s;
 	size_t	i;
 
-	i = ft_strlen(s1) + 1;
-	s = malloc(i);
-	if (s == 0)
-		return (NULL);
-	ft_strlcpy (s, s1, i);
+	i = 0;
+	while (s[start] != '\0')
+	{
+		s[i] = s[start];
+		i++;
+		start++;
+	}
+	s[i] = 0;
 	return (s);
 }
 
@@ -73,10 +63,12 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	int		i;
 
 	i = 0;
-	if (!s1 || !s2)
+	if (!s1)
+		s1 = malloc(1);
+	if (!s2)
 		return (NULL);
 	s = (char *)malloc((sizeof(char) * (strlen(s1) + strlen(s2) + 1)));
-	if (!s)
+	if (!s1)
 		return (NULL);
 	while (*s1 != '\0')
 		s[i++] = *s1++;
@@ -90,7 +82,9 @@ char *ft_substr(char *s, int start, int size)
 	int i;
 	i = 0;
 	char *d;
-	d = ft_calloc (size + 1 ,1);
+	d = malloc (size + 1);
+	if (!d)
+		return(NULL);
 	while(i < size)
 	{
 		d[i] = s[start];
