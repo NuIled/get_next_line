@@ -33,6 +33,8 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t n)
 
 int ft_strchr(char *s, char c)
 {
+	if (!s)
+		return (0);
     while (*s)
     {
         if (*s == c)
@@ -44,53 +46,61 @@ int ft_strchr(char *s, char c)
 
 char	*ft_strtrim(char *s, int start)
 {
+	char *remain;
 	size_t	i;
-
 	i = 0;
-	while (s[start] != '\0')
+	remain = malloc(strlen(s)-start +1);
+	while (i < strlen(s)-start)
 	{
-		s[i] = s[start];
+		remain[i] = s[start];
 		i++;
 		start++;
 	}
-	s[i] = 0;
-	return (s);
+	remain[i] = 0;
+	return (free(s),remain);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
-	char	*s;
+	char	*res;
 	int		i;
+	int		j;
 
-	i = 0;
-	if (!s1)
-		s1 = malloc(1);
-	if (!s2)
-		return (NULL);
-	s = (char *)malloc((sizeof(char) * (strlen(s1) + strlen(s2) + 1)));
-	if (!s1)
-		return (NULL);
-	while (*s1 != '\0')
-		s[i++] = *s1++;
-	while (*s2 != '\0')
-		s[i++] = *s2++;
-	s[i] = 0;
-	return (s);
-}
-char *ft_substr(char *s, int start, int size)
-{
-	int i;
-	i = 0;
-	char *d;
-	d = malloc (size + 1);
-	if (!d)
-		return(NULL);
-	while(i < size)
+	if(!s1)
+		s1 = strdup("");
+	if (s1 && s2)
 	{
-		d[i] = s[start];
-		i++;
-		start++;
+		res = (char *)malloc(((ft_strlen(s1) + ft_strlen(s2)) + 1));
+		if (!res)
+			return (NULL);
+		i = -1;
+		j = -1;
+		while (s1[++i])
+			res[i] = s1[i];
+		while (s2[++j])
+			res[i + j] = s2[j];
+		res[i + j] = '\0';
+			// printf("--->%s<----",res);
+		free(s1);
+		return ( res);
 	}
-	d[i] = 0;
-	return d;
+	return (NULL);
+}
+
+char	*ft_strtri(char *s, int i)
+{
+	int	j;
+
+	j = 0;
+	char *d;
+	d = malloc (i + 1);
+	if(!d)
+		return(NULL);
+	while (s[j] && j < i)
+	{
+		d[j] = s[j];
+		j++;
+	}
+	d[j] = 0;
+	return (d);
 }
