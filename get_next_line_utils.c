@@ -1,12 +1,35 @@
-# include "unistd.h"
-# include "stdlib.h"
-# include "stdio.h"
-# include "fcntl.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aoutifra <aoutifra@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/04 02:58:55 by aoutifra          #+#    #+#             */
+/*   Updated: 2022/12/04 20:55:08 by aoutifra         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
-size_t ft_strlen(const char *s)
+char	*ft_strdup(const char *s1 )
 {
-	size_t i = 0;
+	char	*s;
+	size_t	i;
+
+	i = ft_strlen(s1) + 1;
+	s = malloc(i);
+	if (s == 0)
+		return (NULL);
+	ft_strlcpy (s, s1, i);
+	return (s);
+}
+
+size_t	ft_strlen(const char *s)
+{
+	size_t	i;
+
+	i = 0;
 	while (s[i++] != 0);
 	return (i);
 }
@@ -30,34 +53,17 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t n)
 	return (lensrc);
 }
 
-
-int ft_strchr(char *s, char c)
+int	ft_strchr(char *s, char c)
 {
 	if (!s)
 		return (0);
-    while (*s)
-    {
-        if (*s == c)
-            return (1);
-        s++;
-    }
-    return 0;
-}
-
-char	*ft_strtrim(char *s, int start)
-{
-	char *remain;
-	size_t	i;
-	i = 0;
-	remain = malloc(strlen(s)-start +1);
-	while (i < strlen(s)-start)
+	while (*s)
 	{
-		remain[i] = s[start];
-		i++;
-		start++;
+		if (*s == c)
+			return (1);
+		s++;
 	}
-	remain[i] = 0;
-	return (free(s),remain);
+	return (0);
 }
 
 char	*ft_strjoin(char *s1, char *s2)
@@ -66,8 +72,10 @@ char	*ft_strjoin(char *s1, char *s2)
 	int		i;
 	int		j;
 
-	if(!s1)
-		s1 = strdup("");
+	if (!s1)
+	{
+		s1 = ft_strdup("");
+	}
 	if (s1 && s2)
 	{
 		res = (char *)malloc(((ft_strlen(s1) + ft_strlen(s2)) + 1));
@@ -80,27 +88,8 @@ char	*ft_strjoin(char *s1, char *s2)
 		while (s2[++j])
 			res[i + j] = s2[j];
 		res[i + j] = '\0';
-			// printf("--->%s<----",res);
 		free(s1);
-		return ( res);
+		return (res);
 	}
 	return (NULL);
-}
-
-char	*ft_strtri(char *s, int i)
-{
-	int	j;
-
-	j = 0;
-	char *d;
-	d = malloc (i + 1);
-	if(!d)
-		return(NULL);
-	while (s[j] && j < i)
-	{
-		d[j] = s[j];
-		j++;
-	}
-	d[j] = 0;
-	return (d);
 }
